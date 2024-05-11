@@ -23,4 +23,6 @@ When soldering the edge connector to the top of the board, you will need to bend
 
 For longevity, it is recommended to use an ENIG finish with gold fingers. HASL (or Lead Free HASL) will still work, but it's more fragile and can fail over time.
 
+[JLCPCB](https://jlcpcb.com/) is generally better priced for ENIG gold fingers than PCBWay. As the time of this writing, you can get 5 of these boards for about $20 US at JLCPCB.
+
 I will add a 3d printed enclosure once I learn CAD software.
