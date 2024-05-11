@@ -22,3 +22,5 @@ I have had success using the following edge connectors:
 When soldering the edge connector to the top of the board, you will need to bend in the pins a bit as the board is only 1.2mm thick to match the original thickness of a NES retail cartridge. This helps preserve the NES cartridge connector. 
 
 For longevity, it is recommended to use an ENIG finish with gold fingers. HASL (or Lead Free HASL) will still work, but it's more fragile and can fail over time.
+
+I will add a 3d printed enclosure once I learn CAD software.
