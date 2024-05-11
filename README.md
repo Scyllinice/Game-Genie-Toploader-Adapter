@@ -8,13 +8,13 @@
 
 This is a adapter/riser PCB for using an original Game Genie on your top loading NES. It also works for clone NES systems that load directly from the cart instead of using emulation (a Retron 5, for example, will not work).
 
-The only component needed to build this PCB into a functioning unit would be a 2.54mm pitch 2x36 pin (72 pin total) edge connector. A 
+The only component needed to build this PCB into a functioning unit would be a 2.54mm pitch 2x36 pin (72 pin total) edge connector. You can search **5530843-8** for a part number as well.
 
 I have had success using the following edge connectors:
 
-
 * [Edge connector 1](https://www.aliexpress.us/item/3256802817047324.html)
 * [Edge connector 2](https://www.aliexpress.us/item/2251832843397196.html)
+* [DigiKey](https://www.digikey.com/en/products/detail/te-connectivity-amp-connectors/5530843-8/770547)
 
 When soldering the edge connector to the top of the board, you will need to bend in the pins a bit as the board is only 1.2mm thick to match the original thickness of a NES retail cartridge. This helps preserve the NES cartridge connector. 
 
