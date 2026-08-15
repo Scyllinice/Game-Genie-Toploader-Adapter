@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Run a command inside the pinned toolchain container.
+#
+#   ./dc <command...>     e.g.  ./dc bash -c "cd pcb && make rebuild"
+#   ./dc                  interactive shell
+#   ./dc --build          (re)build the image and exit
+#
+# WHY THIS EXISTS. A .devcontainer that pins a toolchain is worth nothing until somebody
+# builds the image, and the failure is silent: every session quietly uses host tools instead,
+# and the Dockerfile rots unnoticed because nothing ever runs it. An environment nobody can
+# invoke in one word does not get used. This is the one word.
+#
+# BUILD ARGS COME FROM devcontainer.json, which is the single source for the pins. A bare
+# `docker build` would silently use the Dockerfile's own ARG defaults; the two agree today,
+# but they are two copies and nothing should depend on them staying in step.
+set -euo pipefail
+cd "$(dirname "$0")"
+
+IMAGE=gg-toploader-dev
+
+build_image() {
+  # shellcheck disable=SC2046
+  docker build -t "$IMAGE" $(python3 - <<'PY'
+import json
+# devcontainer.json allows comments; strip // lines before parsing
+txt = "".join(l for l in open(".devcontainer/devcontainer.json")
+              if not l.strip().startswith("//"))
+args = json.loads(txt)["build"]["args"]
+print(" ".join(f"--build-arg {k}={v}" for k, v in args.items()))
+PY
+  ) .devcontainer/
+}
+
+if [ "${1:-}" = "--build" ]; then
+  build_image; exit 0
+fi
+
+if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+  echo "dc: image '$IMAGE' not built yet — building (one-time, a few minutes, ~4 GB)" >&2
+  build_image
+fi
+
+# -t only when stdin is a real terminal: scripts, CI and agents pipe stdin, and docker refuses
+# -it without a TTY. Interactive use still gets a proper shell.
+TTY=()
+[ -t 0 ] && TTY=(-it)
+
+# NO BYTECODE WRITES. Python invalidates a .pyc by comparing the source's mtime against the one
+# recorded when it compiled — a file the HOST wrote against a timestamp the CONTAINER recorded,
+# and those are not the same clock. Measured on an earlier project: a pin table edited on the
+# host kept importing its PREVIOUS definitions inside the container. The failure mode is the
+# bad one — edit lib/pinout.py, regenerate, get the old nets on a board that passes every
+# check. Recompiling a handful of small modules per run costs milliseconds.
+#
+# --user: map to the invoking user so files created in the mounted tree stay yours. On this
+# machine that equals the image's 'ubuntu' (uid 1000); the explicit flag keeps it true elsewhere.
+exec docker run --rm "${TTY[@]}" \
+  --user "$(id -u):$(id -g)" \
+  -e PYTHONDONTWRITEBYTECODE=1 \
+  -e HOME=/tmp \
+  -v "$PWD":/work -w /work \
+  "$IMAGE" "${@:-bash}"

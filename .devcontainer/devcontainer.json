@@ -1,0 +1,19 @@
+{
+  "name": "Game Genie Toploader Adapter toolchain",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": { "KICAD_PPA": "kicad/kicad-10.0-releases" }
+  },
+  "workspaceFolder": "/work",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/work,type=bind,consistency=cached",
+  "remoteUser": "ubuntu",
+  "updateRemoteUserUID": true,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "antyos.openscad"
+      ]
+    }
+  }
+}

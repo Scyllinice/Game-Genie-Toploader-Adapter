@@ -23,4 +23,43 @@ When soldering the edge connector to the top of the board, you will need to bend
 
 For longevity, it is recommended to use an ENIG finish with gold fingers. HASL (or Lead Free HASL) will still work, but it's more fragile and can fail over time.
 
-I will add a 3d printed enclosure once I learn CAD software.
+[JLCPCB](https://jlcpcb.com/) is generally better priced for ENIG gold fingers than PCBWay. As the time of this writing, you can get 5 of these boards for about $20 US at JLCPCB.
+
+## 3D printed enclosure — [`mech/`](mech/README.md)
+
+![both halves, laid out as they print](mech/render_parts.png)
+
+A two-part shell, **106.1 × 16.8 × 58.4 mm**, held together by two M2 screws through
+the board's own mounting holes. Prints without supports; `mech/front.stl` and
+`mech/back.stl` are ready to slice.
+
+## The KiCad project lives in [`pcb/`](pcb/README.md)
+
+The board is now **generated from source rather than drawn**: a 72-pin pinout table and
+a set of measured dimensions, from which the footprints, symbols, schematic, board,
+copper and fab outputs are all produced by `make rebuild`.
+
+```
+cd pcb
+make            check what is committed — DRC, ERC, card-edge rules, and the
+                comparison against the board that was released
+make rebuild    regenerate everything from the two source tables
+make fab        gerbers, drill, position file, BOM
+```
+
+Regenerating wants the pinned toolchain — `./dc bash -c "cd pcb && make rebuild"` runs
+it in a container with KiCad 10 and OpenSCAD, which is what the committed files were
+built with. See [`.devcontainer/`](.devcontainer/README.md). Checking works with
+whatever KiCad you have.
+
+It is the same board. The hand-drawn files this project shipped with are frozen in
+[`pcb/reference/`](pcb/reference/README.md), and every run subtracts the generated
+board from them — 144 pads, 72 nets, 14 outline corners, both holes, all three silk
+texts, to within 1 µm. Nothing about the physical board, the pinout or the fab package
+has changed.
+
+What the rebuild adds: a schematic that passes ERC (the drawn one reports 54 direction
+conflicts, because one symbol was used for both ends of a pass-through), card-edge
+checks KiCad's DRC does not have (finger pitch, front/back registration, the bevel
+zone, the contact wipe path), ENIG and the 1.2 mm stackup declared in the gerber job
+file rather than only in this README, and a rebuild that is byte-identical run to run.

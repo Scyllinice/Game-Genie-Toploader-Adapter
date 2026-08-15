@@ -1,0 +1,8 @@
+# Derived outputs. Everything here is one `make` away from the generators.
+fab/
+render_*.png
+*-drc.rpt
+*-erc.rpt
+__pycache__/
+lib/__pycache__/
+*.kicad_prl

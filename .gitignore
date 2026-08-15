@@ -1,3 +1,7 @@
 *.lck
-Game Genie Toploader Adapter-backups/
+*.kicad_prl
+*-backups/
 production/backups
+
+# KiCad's footprint index. Rebuilt on demand, 3.4 MB, and it was tracked.
+fp-info-cache
