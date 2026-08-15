@@ -6,6 +6,9 @@
 
 <a href="https://www.pcbway.com/project/shareproject/Game_Genie_Toploader_Adapter_25efb8dd.html"><img src="https://www.pcbway.com/project/img/images/frompcbway-1220.png" alt="PCB from PCBWay" /></a>
 
+
+![Render](<Game Genie Toploader Adapter.png>)
+
 This is a adapter/riser PCB for using an original Game Genie on your top loading NES. It also works for clone NES systems that load directly from the cart instead of using emulation (a Retron 5, for example, will not work).
 
 The only component needed to build this PCB into a functioning unit would be a 2.54mm pitch 2x36 pin (72 pin total) edge connector. You can search **5530843-8** for a part number as well.
